@@ -1,0 +1,3 @@
+//Actions 
+
+const UPDATE_USERANME = 'UPDATE_USERANME'

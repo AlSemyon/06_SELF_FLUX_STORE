@@ -28,18 +28,8 @@ class UserProfStore extends Store {
     }
 
     __onDispatch(action){
-        const {type, payload} = action;
-
-        switch(type) {
-            case UPDATE_USERANME:
-                this.__state.username = payload;   
-                this.__emitChange();
-                break;
-            case UPDATE_FONTSIZE:
-                this.__state.fonstSize = payload;
-                this.__emitChange();
-                break;
-        }
+        console.log('Store is going to dispatch', action);
+        this.__emitChange();
     }
 
     getState(){

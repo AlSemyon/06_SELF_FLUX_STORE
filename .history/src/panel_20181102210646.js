@@ -32,14 +32,13 @@ class UserProfStore extends Store {
 
         switch(type) {
             case UPDATE_USERANME:
-                this.__state.username = payload;   
-                this.__emitChange();
-                break;
+                this.__state.username = payload;    
+            break;
             case UPDATE_FONTSIZE:
-                this.__state.fonstSize = payload;
-                this.__emitChange();
                 break;
         }
+
+        this.__emitChange();
     }
 
     getState(){

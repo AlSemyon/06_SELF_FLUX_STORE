@@ -6,13 +6,14 @@ const panelDispatcher = new Dispatcher();
 
 document.querySelector("#userNameInput").addEventListener('input', ({target}) => {
     const name = target.value;
-    panelDispatcher.dispatch(userNameUpdate(name))
+    console.log("Dispatching ...");
+    panelDispatcher.dispatch('TODO_NAMEINPUTACTION')
 })
 
 document.fontSizeForm.fontSize.forEach(item => {
     item.addEventListener('change', ({target}) => {
-        const size = target.value;
-        panelDispatcher.dispatch(fontSizeUpdate(size));
+        console.log("Dispatching ...");
+        panelDispatcher.dispatch('TODO_FONTUPACTION');
     }, false)
 })
 
@@ -28,42 +29,27 @@ class UserProfStore extends Store {
     }
 
     __onDispatch(action){
-        const {type, payload} = action;
-
-        switch(type) {
-            case UPDATE_USERANME:
-                this.__state.username = payload;   
-                this.__emitChange();
-                break;
-            case UPDATE_FONTSIZE:
-                this.__state.fonstSize = payload;
-                this.__emitChange();
-                break;
-        }
+        console.log('Store is going to dispatch', action);
+        this.__emitChange();
     }
 
     getState(){
         return this.__state;
     }
+
 }
-
-const userProfStore = new UserProfStore(panelDispatcher);
-
-userProfStore.addListener(state => {
-    console.log("current state is", state);
-})
 
 //Actions 
 
 const UPDATE_USERANME = 'UPDATE_USERANME';
 const UPDATE_FONTSIZE = 'UPDATE_FONTSIZE';
 
-const userNameUpdate = name => ({
+const userNameUpdate = name = ({
     type: UPDATE_USERANME,
     payload: name
 });
 
-const fontSizeUpdate = size => ({
-    type: UPDATE_FONTSIZE,
-    payload: size
-});
+// const fontSizeUpdate = size = ({
+//     type: UPDATE_FONTSIZE,
+//     payload: size
+// });
