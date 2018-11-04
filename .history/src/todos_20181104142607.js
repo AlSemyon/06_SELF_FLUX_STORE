@@ -103,10 +103,8 @@ const render = () => {
 
     if (taskStore.isHistory()) {
             undoBtn.firstElementChild.disabled = false;
-            undoBtn.firstElementChild.innerHTML = undoBtnText + " - " + taskStore.__history.length;
         } else {
             undoBtn.firstElementChild.disabled = true;
-            undoBtn.firstElementChild.innerHTML = undoBtnText;
         }
 
 }

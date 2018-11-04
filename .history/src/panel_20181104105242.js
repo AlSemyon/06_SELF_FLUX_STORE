@@ -1,62 +1,55 @@
-import {Dispatcher,Store} from './flux'
+import {Dispatcher} from './flux/Dispatcher'
+import {Store} from './flux/Store'
 
 // dispatcher
 const panelDispatcher = new Dispatcher();
 
-document.querySelector("#userNameInput").addEventListener('input', ({
-    target
-}) => {
+document.querySelector("#userNameInput").addEventListener('input', ({target}) => {
     const name = target.value;
     panelDispatcher.dispatch(userNameUpdate(name))
 })
 
 document.fontSizeForm.fontSize.forEach(item => {
-    item.addEventListener('change', ({
-        target
-    }) => {
+    item.addEventListener('change', ({target}) => {
         const size = target.value;
         panelDispatcher.dispatch(fontSizeUpdate(size));
     }, false)
 })
 
-panelDispatcher.register((action) => {
+panelDispatcher.register( (action) => {
     console.log(action)
 })
 
 //store 
 
-class PanelStore extends Store {
-    getInitialState() {
-        return localStorage['preference'] 
-        ? JSON.parse(localStorage['preference']) 
-        : {
-            userName: 'Jim',
-            fonSize: 'small'
-        }
+class UserProfStore extends Store {
+    getInitialState(){
+        return {username: 'Jim', fonstSize: 'small'}
     }
 
-    __onDispatch(action) {
-        const {
-            type,
-            payload
-        } = action;
+    __onDispatch(action){
+        const {type, payload} = action;
 
-        switch (type) {
+        switch(type) {
             case UPDATE_USERANME:
-                this.__state.username = payload;
+                this.__state.username = payload;   
                 this.__emitChange();
                 break;
             case UPDATE_FONTSIZE:
-                this.__state.fontSize = payload;
+                this.__state.fonstSize = payload;
                 this.__emitChange();
                 break;
         }
     }
+
+    getState(){
+        return this.__state;
+    }
 }
 
-const panelStore = new PanelStore(panelDispatcher);
+const userProfStore = new UserProfStore(panelDispatcher);
 
-panelStore.addListener(state => {
+userProfStore.addListener(state => {
     console.log("current state is", state);
 })
 
@@ -75,17 +68,11 @@ const fontSizeUpdate = size => ({
     payload: size
 });
 
-panelStore.addListener(state => {
+UserProfStore.addEventListener(state => {
     render(state);
-    localStorage['preference'] = JSON.stringify(state);
 })
 
-const render = ({
-    username,
-    fontSize
-}) => {
+const render = ({username, fontSize}) => {
     document.getElementById('userName').innerHTML = username;
     document.getElementById('content-page').style.fontSize = fontSize === 'small' ? '16px' : '24px';
 }
-
-render(panelStore.getState());

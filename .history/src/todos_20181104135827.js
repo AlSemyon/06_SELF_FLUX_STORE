@@ -41,7 +41,7 @@ class TaskStore extends ReduceStore{
                     completed: false
                 },
             ],
-            showComplete: false
+            showComplete: true
         }
     }
 
@@ -74,24 +74,19 @@ const taskStore = new TaskStore(todoDispatcher);
 
 const TaskComponent = ({content, completed, id}) => {
     return `<section>
-        <label for="${id}">${content}</label>
-        <input type="checkbox" name="taskCompleteCheck" id="${id}" data-taskid="${id}" ${completed ? 'checked': ''}>
+        ${content} <input type="checkbox" name="taskCompleteCheck" data-taskid="${id}" ${completed ? 'checked': ''}>
     </section>`;
 }
 
-var undoBtn = document.forms.undo;
-var undoBtnText = undoBtn.firstElementChild.innerHTML;
 const render = () => {
     const tasksSection = document.getElementById('tasks');
-    const {tasks, showComplete} = taskStore.getState();
+    const state = taskStore.getState();
     
-    const rendered = tasks
-        .filter(task => showComplete ? true : !task.completed)
+    const rendered = state.tasks
+        .filter(task => !task.completed)
         .map(TaskComponent)
         .join('');
     tasksSection.innerHTML = rendered;
-
-    document.getElementById('showComplete').checked = showComplete;
 
     document.getElementsByName('taskCompleteCheck').forEach(item => {
         item.addEventListener('change', ({target}) => {
@@ -100,15 +95,6 @@ const render = () => {
             todoDispatcher.dispatch(completeTaskAction(id, checked))
         })
     })
-
-    if (taskStore.isHistory()) {
-            undoBtn.firstElementChild.disabled = false;
-            undoBtn.firstElementChild.innerHTML = undoBtnText + " - " + taskStore.__history.length;
-        } else {
-            undoBtn.firstElementChild.disabled = true;
-            undoBtn.firstElementChild.innerHTML = undoBtnText;
-        }
-
 }
 
 document.forms.newTask.addEventListener('submit', e => {
@@ -124,11 +110,6 @@ document.getElementById('showComplete').addEventListener('change', ({target}) =>
     const showCompleted = target.checked;
     todoDispatcher.dispatch(showCompletedAction(showCompleted))    
 })
-undoBtn.addEventListener('submit', e => {
-    e.preventDefault();
-    taskStore.revert();
-}, false)
-
 taskStore.addListener(render)
 
 render();

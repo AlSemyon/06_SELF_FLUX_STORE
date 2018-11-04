@@ -1,4 +1,9 @@
-import {Dispatcher,Store} from './flux'
+import {
+    Dispatcher
+} from './flux/Dispatcher'
+import {
+    Store
+} from './flux/Store'
 
 // dispatcher
 const panelDispatcher = new Dispatcher();
@@ -27,9 +32,7 @@ panelDispatcher.register((action) => {
 
 class PanelStore extends Store {
     getInitialState() {
-        return localStorage['preference'] 
-        ? JSON.parse(localStorage['preference']) 
-        : {
+        return localStorage['preference'] ? JSON.parse(localStorage['preference']) : {
             userName: 'Jim',
             fonSize: 'small'
         }
@@ -51,6 +54,10 @@ class PanelStore extends Store {
                 this.__emitChange();
                 break;
         }
+    }
+
+    getState() {
+        return this.__state;
     }
 }
 

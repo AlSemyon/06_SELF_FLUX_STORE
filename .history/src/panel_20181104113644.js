@@ -52,6 +52,10 @@ class PanelStore extends Store {
                 break;
         }
     }
+
+    getState() {
+        return this.__state;
+    }
 }
 
 const panelStore = new PanelStore(panelDispatcher);

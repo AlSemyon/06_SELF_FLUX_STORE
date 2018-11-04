@@ -80,7 +80,6 @@ const TaskComponent = ({content, completed, id}) => {
 }
 
 var undoBtn = document.forms.undo;
-var undoBtnText = undoBtn.firstElementChild.innerHTML;
 const render = () => {
     const tasksSection = document.getElementById('tasks');
     const {tasks, showComplete} = taskStore.getState();
@@ -102,13 +101,8 @@ const render = () => {
     })
 
     if (taskStore.isHistory()) {
-            undoBtn.firstElementChild.disabled = false;
-            undoBtn.firstElementChild.innerHTML = undoBtnText + " - " + taskStore.__history.length;
-        } else {
-            undoBtn.firstElementChild.disabled = true;
-            undoBtn.firstElementChild.innerHTML = undoBtnText;
-        }
 
+    }
 }
 
 document.forms.newTask.addEventListener('submit', e => {
@@ -129,6 +123,11 @@ undoBtn.addEventListener('submit', e => {
     taskStore.revert();
 }, false)
 
-taskStore.addListener(render)
+taskStore.addListener(render) {
+    undoBtn.firstElementChild.disabled = false;
+} else {
+    undoBtn.firstElementChild.disabled = true;
+
+}
 
 render();

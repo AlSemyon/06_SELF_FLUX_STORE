@@ -1,4 +1,9 @@
-import {Dispatcher,Store} from './flux'
+import {
+    Dispatcher
+} from './flux/Dispatcher'
+import {
+    Store
+} from './flux/Store'
 
 // dispatcher
 const panelDispatcher = new Dispatcher();
@@ -51,6 +56,10 @@ class PanelStore extends Store {
                 this.__emitChange();
                 break;
         }
+    }
+
+    getState() {
+        return this.__state;
     }
 }
 

@@ -79,8 +79,6 @@ const TaskComponent = ({content, completed, id}) => {
     </section>`;
 }
 
-var undoBtn = document.forms.undo;
-var undoBtnText = undoBtn.firstElementChild.innerHTML;
 const render = () => {
     const tasksSection = document.getElementById('tasks');
     const {tasks, showComplete} = taskStore.getState();
@@ -92,7 +90,7 @@ const render = () => {
     tasksSection.innerHTML = rendered;
 
     document.getElementById('showComplete').checked = showComplete;
-
+    
     document.getElementsByName('taskCompleteCheck').forEach(item => {
         item.addEventListener('change', ({target}) => {
             const id = target.dataset.taskid;
@@ -100,15 +98,6 @@ const render = () => {
             todoDispatcher.dispatch(completeTaskAction(id, checked))
         })
     })
-
-    if (taskStore.isHistory()) {
-            undoBtn.firstElementChild.disabled = false;
-            undoBtn.firstElementChild.innerHTML = undoBtnText + " - " + taskStore.__history.length;
-        } else {
-            undoBtn.firstElementChild.disabled = true;
-            undoBtn.firstElementChild.innerHTML = undoBtnText;
-        }
-
 }
 
 document.forms.newTask.addEventListener('submit', e => {
@@ -124,7 +113,7 @@ document.getElementById('showComplete').addEventListener('change', ({target}) =>
     const showCompleted = target.checked;
     todoDispatcher.dispatch(showCompletedAction(showCompleted))    
 })
-undoBtn.addEventListener('submit', e => {
+document.forms.undo.addEventListener('submit', e => {
     e.preventDefault();
     taskStore.revert();
 }, false)
