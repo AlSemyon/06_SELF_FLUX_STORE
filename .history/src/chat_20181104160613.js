@@ -3,15 +3,18 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import {get} from './http/index';
 
-//Actions
 const ONLINE = 'ONLINE';
 const OFFLINE = 'OFFLINE';
+const AWAY = 'AWAY';
+const BUSY = 'BUSY';
 const CREATE_MESSAGE = 'CREATE_MESSAGE';
 const CHANGE_STATUS = 'CHANGE_STATUS';
 const READY = '_READY';
 const START = '_START';
 
-//состояние для всего приложения
+
+
+
 const defaultState = {
     messages: [
         {
@@ -29,9 +32,6 @@ const defaultState = {
     api: true
 }
 
-//cоздаем отдельные редюсеры для каждого компонента
-//сообщения, пользователя, и работы с апи
-// всем им передаем отдельные кусочки состояния
 const messagesReducer  = (state = defaultState.messages, action) => {
     const {type, payload} = action;
     switch(type) {
@@ -67,23 +67,19 @@ const apiReducer = (state = defaultState.api, action)  => {
     return state;
 }
 
-//обеденям их с помощью combineReducers из пакета redux
 const reducer = combineReducers({
     messages: messagesReducer, 
     userStatus: userStatusReducer,
     api: apiReducer
 });
 
-//Создает Redux хранилище которое хранит полное дерево состояния вашего приложения.
-//Оно должно быть единственным хранилищем в вашем приложении.
 const store = createStore(reducer, {} , applyMiddleware(thunk, logger));
-//разместил хранилище в windiw в туду можно было сделать так же
 window.store = store;
 
 
 
 
-//Action functions
+
 const changeStatusAction = status  => ({
     type: CHANGE_STATUS,
     payload: {status}
