@@ -81,13 +81,6 @@ const fontSizeUpdate = size => ({
     payload: size
 });
 
-/*
-В view пишем функцию render которая принимает state и применяет его значения
-к DOM элементам.
-В view с помощью store.addListener регистрирутся слушатель
-   state => render(state), который  будет запускать функцию render
-   (см. метод __emitChange() класса Store )
-   */
 panelStore.addListener(state => {
     render(state);
     localStorage['preference'] = JSON.stringify(state);
